@@ -2,11 +2,11 @@
 
 <h3>Editar País</h3>
 
-@if (_country == null)
+@if (country == null)
 {
     <Loading />
 }
 else
 {
-    <CountryForm @ref="_countryForm" Country="_country" OnValidSubmit="EditAsync" ReturnAction="Return" />
+    <CountryForm @ref="countryForm" Country="country" OnValidSubmit="EditAsync" ReturnAction="Return" />
 }

@@ -4,12 +4,12 @@ using Orders.Frontend.Repositories;
 using Orders.Shared.Entities;
 using System.Net;
 
-namespace Orders.Frontend.Pages.Countries
+namespace Orders.Frontend.Pages.Categories
 {
-    public partial class CountryEdit
+    public partial class CategoryEdit
     {
-        private CountryForm? countryForm;
-        private Country? country;
+        private CategoryForm? categoryForm;
+        private Category? category;
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
@@ -17,12 +17,12 @@ namespace Orders.Frontend.Pages.Countries
 
         protected override async Task OnInitializedAsync()
         {
-            var responseHttp = await Repository.GetAsync<Country>($"api/countries/{Id}");
+            var responseHttp = await Repository.GetAsync<Category>($"api/categories/{Id}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
-                    NavigationManager.NavigateTo("/countries");
+                    NavigationManager.NavigateTo("/categories");
                 }
                 else
                 {
@@ -32,13 +32,13 @@ namespace Orders.Frontend.Pages.Countries
             }
             else
             {
-                country = responseHttp.Response!;
+                category = responseHttp.Response!;
             }
         }
 
         private async Task EditAsync()
         {
-            var responseHttp = await Repository.PutAsync("api/Countries", country);
+            var responseHttp = await Repository.PutAsync("api/categories", category);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -59,8 +59,8 @@ namespace Orders.Frontend.Pages.Countries
 
         private void Return()
         {
-            countryForm!.FormPostedSuccesfully = true;
-            NavigationManager.NavigateTo("/countries");
+            categoryForm!.FormPostedSuccesfully = true;
+            NavigationManager.NavigateTo("/categories");
         }
     }
 }

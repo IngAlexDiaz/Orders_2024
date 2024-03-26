@@ -12,14 +12,14 @@ namespace Orders.Backend.UnitsOfWork.Implementations
         {
             _repository = repository;
         }
-        public async Task<ActionResponse<T>> AddAsync(T model) => await _repository.AddAsync(model);
+        public virtual async Task<ActionResponse<T>> AddAsync(T model) => await _repository.AddAsync(model);
 
-        public async Task<ActionResponse<T>> DeleteAsync(int id) => await _repository.DeleteAsync(id);
+        public virtual async Task<ActionResponse<T>> DeleteAsync(int id) => await _repository.DeleteAsync(id);
 
-        public async Task<ActionResponse<T>> GetAsync(int id) => await _repository.GetAsync(id);
+        public virtual async Task<ActionResponse<T>> GetAsync(int id) => await _repository.GetAsync(id);
 
-        public Task<ActionResponse<IEnumerable<T>>> GetAsync() => _repository.GetAsync();
+        public virtual Task<ActionResponse<IEnumerable<T>>> GetAsync() => _repository.GetAsync();
 
-        public Task<ActionResponse<T>> UpdateAsync(T model) => _repository.UpdateAsync(model);
+        public virtual Task<ActionResponse<T>> UpdateAsync(T model) => _repository.UpdateAsync(model);
     }
 }

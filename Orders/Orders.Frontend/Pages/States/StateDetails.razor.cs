@@ -4,13 +4,13 @@ using Orders.Frontend.Repositories;
 using Orders.Shared.Entities;
 using System.Net;
 
-namespace Orders.Frontend.Pages.Countries
+namespace Orders.Frontend.Pages.States
 {
-    public partial class CountriesDetails
+    public partial class StateDetails
     {
-        private Country? country;
+        private State? state;
 
-        [Parameter] public int CountryId { get; set; }
+        [Parameter] public int StateId { get; set; }
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
@@ -22,7 +22,7 @@ namespace Orders.Frontend.Pages.Countries
 
         private async Task LoadAsync()
         {
-            var responseHttp = await Repository.GetAsync<Country>($"/api/countries/{CountryId}");
+            var responseHttp = await Repository.GetAsync<State>($"/api/states/{StateId}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
@@ -34,15 +34,15 @@ namespace Orders.Frontend.Pages.Countries
                 await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
-            country = responseHttp.Response;
+            state = responseHttp.Response;
         }
 
-        private async Task DeleteAsync(State state)
+        private async Task DeleteAsync(City city)
         {
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "Confirmación",
-                Text = $"¿Realmente deseas eliminar el Estado / Provincia? {state.Name}",
+                Text = $"¿Realmente deseas eliminar la ciudad? {city.Name}",
                 Icon = SweetAlertIcon.Question,
                 ShowCancelButton = true,
                 CancelButtonText = "No",
@@ -55,7 +55,7 @@ namespace Orders.Frontend.Pages.Countries
                 return;
             }
 
-            var responseHttp = await Repository.DeleteAsync<State>($"/api/states?id={state.Id}");
+            var responseHttp = await Repository.DeleteAsync<City>($"/api/cities?id={city.Id}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode != HttpStatusCode.NotFound)
@@ -65,7 +65,6 @@ namespace Orders.Frontend.Pages.Countries
                     return;
                 }
             }
-
             await LoadAsync();
             var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
@@ -74,7 +73,9 @@ namespace Orders.Frontend.Pages.Countries
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-            await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro borrado con éxito.");
+            await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro eliminado con éxito.");
+
+            NavigationManager.NavigateTo("/countries");
         }
     }
 }
